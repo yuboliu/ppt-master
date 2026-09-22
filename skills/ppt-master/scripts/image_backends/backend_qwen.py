@@ -5,7 +5,7 @@ Alibaba Cloud Qwen image generation backend.
 Configuration keys:
   QWEN_API_KEY / DASHSCOPE_API_KEY   (required)
   QWEN_BASE_URL                      (optional)
-  QWEN_MODEL                         (optional; qwen-image-2.0-pro only)
+  QWEN_MODEL                         (optional; qwen-image-2.0-pro by default)
 """
 
 import sys
@@ -44,7 +44,10 @@ from image_backends.backend_common import (
 
 DEFAULT_ENDPOINT = "https://dashscope-intl.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation"
 DEFAULT_MODEL = "qwen-image-2.0-pro"
-SUPPORTED_MODELS = {DEFAULT_MODEL}
+SUPPORTED_MODELS = {
+    DEFAULT_MODEL,
+    "qwen-image-3.0",
+}
 
 ASPECT_RATIO_SIZE_MAP = {
     "512px": {
@@ -114,7 +117,7 @@ def _resolve_size(aspect_ratio: str, image_size: str) -> str:
         supported_sizes = ", ".join(ASPECT_RATIO_SIZE_MAP)
         raise ValueError(
             f"Unsupported image size '{image_size}' for Qwen backend. "
-            f"qwen-image-2.0-pro supports these logical sizes: {supported_sizes}."
+            f"This backend supports these logical sizes: {supported_sizes}."
         )
     size = sizes.get(aspect_ratio)
     if not size:
